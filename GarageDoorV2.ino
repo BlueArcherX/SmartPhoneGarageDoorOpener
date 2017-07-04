@@ -10,7 +10,8 @@ Tyler Winegarner, 2017
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
 
-#include <ESP8266WiFi.h>
+//This seems to be an Arduino module?
+// #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
 // You should get Auth Token in the Blynk App.
