@@ -10,8 +10,7 @@ Tyler Winegarner, 2017
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
 
-//This seems to be an Arduino module?
-// #include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
 // You should get Auth Token in the Blynk App.
@@ -26,7 +25,7 @@ char pass[] = "PASSWORD";
 // Select your pin with physical button
 const int doorPin = 2;
 int warnPin;
-int warnThreshold = 2000;
+int warnThreshold = 4000;
 int tick = 0;
 WidgetLCD lcd(V3);
 
