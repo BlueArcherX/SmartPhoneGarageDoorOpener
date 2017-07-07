@@ -6,6 +6,7 @@ and yells at you when you leave the garage door open
 // Tyler Winegarner, 2017
 // Forked and modified by Brad Calvert, 2017
 
+#include <Arduino.h>
 #include <Blynk.h>
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
@@ -16,7 +17,7 @@ and yells at you when you leave the garage door open
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
 char auth[] = "***REMOVED***";
-char auth2[] = "***REMOVED***";
+// char auth2[] = "***REMOVED***";
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
@@ -27,6 +28,7 @@ char pass[] = "***REMOVED***";
 const int doorPin = 2;
 int warnPin;
 // set warnThreshold to 100 (what is the unit?)
+// this appears to just increment with each loop?
 int warnThreshold = 100; // 400 = 1 minute
 // set tick 0
 int tick = 0;
