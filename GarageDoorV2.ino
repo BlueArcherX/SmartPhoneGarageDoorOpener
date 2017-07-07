@@ -12,7 +12,7 @@
 #include <BlynkSimpleEsp8266.h>
 
 // Comment this out to disable prints and save space
-#define BLYNK_PRINT Serial
+// #define BLYNK_PRINT Serial
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
@@ -75,7 +75,7 @@ void buttonLedWidget()
 void setup()
 {
   // Debug console
-  Serial.begin(9600);
+  //Serial.begin(9600);
 
   Blynk.begin(auth, ssid, pass);
   // You can also specify server:
