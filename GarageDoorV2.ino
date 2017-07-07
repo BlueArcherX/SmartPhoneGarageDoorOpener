@@ -1,18 +1,17 @@
-#include <Blynk.h>
-
 /*************************************************************
 This is the latest and likely final rev of my Smartphone Garage Door Opener sketch
 using the Adafruit Feather Huzzah board and the Blynk framework. It's pretty robust 
 and yells at you when you leave the garage door open 
 ************************************************************ */
-
 // Tyler Winegarner, 2017
+// Forked and modified by Brad Calvert, 2017
+
+#include <Blynk.h>
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
 
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
-
-#include <ESP8266WiFi.h>
-#include <BlynkSimpleEsp8266.h>
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
