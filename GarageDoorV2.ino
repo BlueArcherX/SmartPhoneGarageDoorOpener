@@ -3,9 +3,10 @@
 /*************************************************************
 This is the latest and likely final rev of my Smartphone Garage Door Opener sketch
 using the Adafruit Feather Huzzah board and the Blynk framework. It's pretty robust 
-and yells at you when you leave the garage door open too long. I hope it serves you well.
+and yells at you when you leave the garage door open 
+************************************************************ */
 
-Tyler Winegarner, 2017
+// Tyler Winegarner, 2017
 
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
@@ -15,17 +16,20 @@ Tyler Winegarner, 2017
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
-char auth[] = "AUTH CODE GOES HERE";
+char auth[] = "***REMOVED***";
+char auth2[] = "***REMOVED***";
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
-char ssid[] = "WIFI";
-char pass[] = "PASSWORD";
+char ssid[] = "***REMOVED***";
+char pass[] = "***REMOVED***";
 
 // Select your pin with physical button
 const int doorPin = 2;
 int warnPin;
-int warnThreshold = 4000;
+// set warnThreshold to 100 (what is the unit?)
+int warnThreshold = 100; // 400 = 1 minute
+// set tick 0
 int tick = 0;
 WidgetLCD lcd(V3);
 
@@ -45,9 +49,12 @@ void buttonLedWidget()
   // Read button
   
   // If state has changed...
+  //check if pin doorPin (2) is high
   if (digitalRead(doorPin) == HIGH) {
-   lcd.print(0,0, "Door Open  ");
-   tick++;
+    // if high print 
+    lcd.print(0,0, "Door Open  ");
+    // increment tick
+    tick++;
   }  else {
    lcd.print(0,0, "Door Closed");
     
