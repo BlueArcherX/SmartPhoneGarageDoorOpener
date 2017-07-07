@@ -7,7 +7,7 @@
 // Forked and modified by Brad Calvert, 2017
 
 //#include <Arduino.h>
-#include <Blynk.h>
+//#include <Blynk.h>
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
