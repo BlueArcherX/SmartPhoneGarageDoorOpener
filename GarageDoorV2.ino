@@ -1,4 +1,4 @@
-/*************************************************************
+/* ************************************************************
 This is the latest and likely final rev of my Smartphone Garage Door Opener sketch
 using the Adafruit Feather Huzzah board and the Blynk framework. It's pretty robust 
 and yells at you when you leave the garage door open 
@@ -29,7 +29,8 @@ const int doorPin = 2;
 int warnPin;
 // set warnThreshold to 100 (what is the unit?)
 // this appears to just increment with each loop?
-int warnThreshold = 100; // 400 = 1 minute
+// 400 = 1 minute
+int warnThreshold = 100;
 // set tick 0
 int tick = 0;
 WidgetLCD lcd(V3);
