@@ -72,7 +72,7 @@ void buttonLedWidget()
   Blynk.virtualWrite(V2, tick);
 }
 
-void setup()
+void setup(void)
 {
   // Debug console
   //Serial.begin(9600);
@@ -87,7 +87,7 @@ void setup()
   timer.setInterval(10, buttonLedWidget);
 }
 
-void loop()
+void loop(void)
 {
   Blynk.run();
   timer.run();
