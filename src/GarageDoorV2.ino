@@ -30,7 +30,7 @@ int warnPin;
 // set warnThreshold to 100 (what is the unit?)
 // this appears to just increment with each loop?
 // 400 = 1 minute
-int warnThreshold = 100;
+int warnThreshold = 3000;
 // set tick 0
 int tick = 0;
 WidgetLCD lcd(V3);
