@@ -102,7 +102,7 @@ void setup(void)
   // I will experiement with this value and check for power savings
   timer.setInterval(500, buttonLedWidget);
   // timer to send the uptime to pin V4 every 5 seconds
-  timer.setInterval(5000, uptimeWidget);
+  timer.setInterval(60000, uptimeWidget);
 }
 
 void loop(void)
