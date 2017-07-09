@@ -100,14 +100,13 @@ void setup(void)
   pinMode(doorPin, INPUT);
   // this timer only allows the function that checks the door state to run every 10 ms by default
   // I will experiement with this value and check for power savings
-  timerDoor = timer.setInterval(500, buttonLedWidget);
+  timer.setInterval(500, buttonLedWidget);
   // timer to send the uptime to pin V4 every 5 seconds
-  timerUptime = timer.setInterval(5000, uptimeWidget);
+  timer.setInterval(5000, uptimeWidget);
 }
 
 void loop(void)
 {
   Blynk.run();
-  timerDoor.run();
-  timerUptime.run();
+  timer.run();
 }
