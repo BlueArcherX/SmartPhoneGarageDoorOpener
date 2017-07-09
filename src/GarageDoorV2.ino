@@ -83,7 +83,7 @@ void uptimeWidget()
   // writes the elapsed time to Blynk pin V4
   // / 60000 to convert milliseconds to minutes
   // / 1000 to convert milliseconds to seconds
-  Blynk.virtualWrite(V4, millis() / 1000);
+  Blynk.virtualWrite(V4, millis() / 60000);
 }
 
 void setup(void) 
