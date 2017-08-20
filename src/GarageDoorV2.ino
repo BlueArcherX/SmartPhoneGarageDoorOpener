@@ -26,20 +26,21 @@ char pass[] = "***REMOVED***";
 
 // Select your pin with physical button
 const int doorPin = 2;
+
 // warnPin is the virtual button in the phone app to enable or disable the notifications
 int warnPin;
-// warnThreshold is the number ot ticks that must pass after opening the door
-// before the phone app will notify
+
+// warnThreshold is the number ot ticks that must pass after opening the door before the phone app will notify
 // 400 = 1 minute
 // 2000 = 5 minutes
 // 4000 = 10 minutes
 // 12000 = 30 minutes
-int warnThreshold = 2000;
+int warnThreshold = 4000;
 // tick increments every cycle of the loop
 int tick = 0;
 WidgetLCD lcd(V3);
 
-// not sure what this does
+//Create a BlynkTimer object called timer
 BlynkTimer timer;
 
 BLYNK_WRITE(V1) {
@@ -71,10 +72,11 @@ void buttonLedWidget()
       Blynk.notify("Garage door is open!");
       // if I understand this correctly, then the number subtracted from tick
       // below is how long to wait before throwing another active alert on the phone?
-      // should be at least 10 minutes
-      tick = (tick - 2000);
+      // should be at least 15 minutes = 6000, but maybe longer
+      tick = (tick - 6000);
     }
   }
+  //not exaclty sure what this does... Writes the value of tick to virtual pin 2?
   Blynk.virtualWrite(V2, tick);
 }
 
@@ -91,20 +93,22 @@ void setup(void)
   // Debug console
   // Serial.begin(9600);
 
-  Blynk.begin(auth, ssid, pass);
   // You can also specify server:
   // Blynk.begin(auth, ssid, pass, "blynk-cloud.com", 8442);
   // Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8442);
+  Blynk.begin(auth, ssid, pass);
+
 
   // Setup physical button pin (active low)
   pinMode(doorPin, INPUT);
-  // this timer only allows the function that checks the door state to run every 10 ms by default
-  // I will experiement with this value and check for power savings
+  // this timer only allows the function that checks the door state to run every 500 ms by default
+  // Experiement with this value and check for power savings
   timer.setInterval(500, buttonLedWidget);
-  // timer to send the uptime to pin V4 every 5 seconds
+  // timer to send the uptime to pin V4 every 60 seconds
   timer.setInterval(60000, uptimeWidget);
 }
 
+//Main loop to execute all the functions defined above
 void loop(void)
 {
   Blynk.run();
