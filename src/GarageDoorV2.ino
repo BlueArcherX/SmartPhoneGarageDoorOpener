@@ -10,25 +10,25 @@
 // #include <Blynk.h>
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
+#include <sensitiveData.h>
+
+//sensitiveData.h needs to contain the following variables:
+//your Blynk auth token
+//char auth[] = "";
+//your WiFi SSID
+//char ssid[] = "";
+//your WiFi password
+//char pass[] = "";
 
 // Comment this out to disable prints and save space
-// #define BLYNK_PRINT Serial
-
-// You should get Auth Token in the Blynk App.
-// Go to the Project Settings (nut icon).
-char auth[] = "***REMOVED***";
-// char auth2[] = "***REMOVED***";
-
-// Your WiFi credentials.
-// Set password to "" for open networks.
-char ssid[] = "***REMOVED***";
-char pass[] = "***REMOVED***";
+#define BLYNK_PRINT Serial
 
 // Select your pin with physical button
 const int doorPin = 2;
 
 // warnPin is the virtual button in the phone app to enable or disable the notifications
-int warnPin;
+//default notification to on
+int warnPin = 1;
 
 // warnThreshold is the number ot ticks that must pass after opening the door before the phone app will notify
 // 400 = 1 minute
@@ -43,8 +43,10 @@ WidgetLCD lcd(V3);
 //Create a BlynkTimer object called timer
 BlynkTimer timer;
 
-BLYNK_WRITE(V1) {
+BLYNK_WRITE(V1) { //write to virtual pin 1
   // I don't really understand this, but I think it is setting warnPin to be virtual pin 1 (V1) from the blynk app
+  // It doesn't seem like this is working correctly, as I have to cycle the warn button every time I start the app
+  // Prior warnPin taking a value other than 0
   warnPin = param.asInt();
 }
 
@@ -67,17 +69,26 @@ void buttonLedWidget()
     tick = 0;
     Blynk.virtualWrite(warnPin, LOW);
   }
+  Serial.println("BEGIN Notify");
+  Serial.println(tick);
+  Serial.println(warnPin);
   if (tick > warnThreshold) {
-    if (warnPin == LOW) {
+    if (warnPin == HIGH) {
       Blynk.notify("Garage door is open!");
-      // if I understand this correctly, then the number subtracted from tick
-      // below is how long to wait before throwing another active alert on the phone?
+      // if I understand this correctly, the number subtracted from tick
+      // below is how long to wait before throwing another active alert on the phone
       // should be at least 15 minutes = 6000, but maybe longer
-      tick = (tick - 6000);
+      //tick = (tick - 6000);
+      // Actually, this should probably just get reset to zero, otherwise it could break
+      // if the alerts were off and the tick got to a very high number before being reset
+      tick = 0;
     }
   }
+  Serial.println("END Notify");
+  
   //not exaclty sure what this does... Writes the value of tick to virtual pin 2?
-  Blynk.virtualWrite(V2, tick);
+  //But nothing in the app is dealing with that pin, so I am just going to comment that out.
+  //Blynk.virtualWrite(V2, tick);
 }
 
 void uptimeWidget()
@@ -88,16 +99,16 @@ void uptimeWidget()
   Blynk.virtualWrite(V4, millis() / 60000);
 }
 
-void setup(void) 
+void setup(void)
 {
   // Debug console
-  // Serial.begin(9600);
+  Serial.begin(9600); //serial for USB serial
+  Serial.println("Serial enabled");
 
   // You can also specify server:
   // Blynk.begin(auth, ssid, pass, "blynk-cloud.com", 8442);
   // Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8442);
   Blynk.begin(auth, ssid, pass);
-
 
   // Setup physical button pin (active low)
   pinMode(doorPin, INPUT);
