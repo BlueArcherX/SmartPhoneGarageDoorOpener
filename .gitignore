@@ -7,3 +7,5 @@ src/sensitiveData.h
 .travis.yml
 platformio.ini
 lib/readme.txt
+.vscode/.browse.c_cpp.db*
+.vscode/launch.json
