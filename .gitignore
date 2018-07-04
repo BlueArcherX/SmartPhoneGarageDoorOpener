@@ -2,10 +2,10 @@
 .piolibdeps
 .vscode
 .vscode/c_cpp_properties.json
-src/sensitiveData.h
-.gitignore
 .travis.yml
 platformio.ini
 lib/readme.txt
 .vscode/.browse.c_cpp.db*
 .vscode/launch.json
+lib/sensitiveData/sensitiveData.h
+.gitignore

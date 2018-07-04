@@ -1,52 +1,53 @@
 // ************************************************************
-// This is the latest and likely final rev of my Smartphone Garage Door Opener sketch
-// using the Adafruit Feather Huzzah board and the Blynk framework. It's pretty robust 
-// and yells at you when you leave the garage door open 
+// ESP8266-based smartphone garage door opener using the
+// Adafruit Feather Huzzah board and the Blynk framework.
+// Will fire alerts on your smart phone Blynk App when the
+// garage door is left open for a defined ammount of time.
 // ************************************************************
-// Tyler Winegarner, 2017
+// Tyler Winegarner, 2017 (Original author)
 // Forked and modified by Brad Calvert, 2017
 
-// #include <Arduino.h>
-// #include <Blynk.h>
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 #include <sensitiveData.h>
 
-//sensitiveData.h needs to contain the following variables:
-//your Blynk auth token
+// sensitiveData.h needs to exist in your include path and contain the following variables:
+// your Blynk auth token
 //char auth[] = "";
-//your WiFi SSID
+// your WiFi SSID
 //char ssid[] = "";
-//your WiFi password
+// your WiFi password
 //char pass[] = "";
 
 // Comment this out to disable prints and save space
 #define BLYNK_PRINT Serial
 
-// Select your pin with physical button
+// The physical pin that receives the input from the door switch.
 const int doorPin = 2;
+// The virtual button in the Blynk app to enable or disable the notifications.
+int warnPin;
 
-// warnPin is the virtual button in the phone app to enable or disable the notifications
-//default notification to on
-int warnPin = 1;
-
-// warnThreshold is the number ot ticks that must pass after opening the door before the phone app will notify
-// 400 = 1 minute
-// 2000 = 5 minutes
-// 4000 = 10 minutes
-// 12000 = 30 minutes
-int warnThreshold = 4000;
+// warnThreshold is the number of ticks that must pass after opening the door before the phone app will notify
+// This is highly dependent on the buttonLedWidget timer value near the bottom of this file
+// for buttonLedWidget =  500   | 2000  length
+//        warnThreshold = 400   | 100   1 minute
+//        warnThreshold = 2000  | 500   5 minutes
+//        warnThreshold = 4000  | 1000  10 minutes
+//        warnThreshold = 12000 | 3000  30 minutes
+int warnThreshold = 1000;
 // tick increments every cycle of the loop
 int tick = 0;
+// Output to the Blynk app virtual LCD screen on virtual pin 3 (V3)
 WidgetLCD lcd(V3);
 
-//Create a BlynkTimer object called timer
+// Create a BlynkTimer object called timer
 BlynkTimer timer;
 
-BLYNK_WRITE(V1) { //write to virtual pin 1
-  // I don't really understand this, but I think it is setting warnPin to be virtual pin 1 (V1) from the blynk app
-  // It doesn't seem like this is working correctly, as I have to cycle the warn button every time I start the app
-  // Prior warnPin taking a value other than 0
+// This checks virtual pin1 (V1) for data written from the Blynk App
+// V1 is a boolean set to turn on and off notifications on the phone with a toggle switch
+BLYNK_WRITE(V1) {
+  // Sets warnPin to the value of the toggle switch in Blynk app
+  // 0 = phone notifications off, 1 = phone notifications on
   warnPin = param.asInt();
 }
 
@@ -58,44 +59,46 @@ void buttonLedWidget()
   // check if pin doorPin (2) is high
   if (digitalRead(doorPin) == HIGH) {
     // if door pin is high, print open status to phone app
-    lcd.print(0,0, "Door Open  ");
+    lcd.print(0,0, "Door Open");
+    Serial.println("Door Open");
     // increment tick, this will increment every loop while the door is open
     // once the tick > warnThreshold, notification is sent to phone
     tick++;
   }  else {
     // if door pin is not high, print closed status to phone app
     lcd.print(0,0, "Door Closed");
+    Serial.println("Door Closed");
     // reset tick to 0 since door was closed
     tick = 0;
     Blynk.virtualWrite(warnPin, LOW);
   }
-  Serial.println("BEGIN Notify");
+  Serial.println("BEGIN Notify Loop");
+  Serial.println("Tick:");
   Serial.println(tick);
+  Serial.println("Warn Pin State:");
   Serial.println(warnPin);
-  if (tick > warnThreshold) {
+    if (tick > warnThreshold) {
     if (warnPin == HIGH) {
       Blynk.notify("Garage door is open!");
-      // if I understand this correctly, the number subtracted from tick
-      // below is how long to wait before throwing another active alert on the phone
-      // should be at least 15 minutes = 6000, but maybe longer
-      //tick = (tick - 6000);
-      // Actually, this should probably just get reset to zero, otherwise it could break
-      // if the alerts were off and the tick got to a very high number before being reset
+      Serial.println("SENT Notification");
+      // Reset tick to zero.This should cause a new alarm to fire at a rate equal to warnThreshold (4000 = 10 minutes)
       tick = 0;
     }
   }
-  Serial.println("END Notify");
-  
-  //not exaclty sure what this does... Writes the value of tick to virtual pin 2?
-  //But nothing in the app is dealing with that pin, so I am just going to comment that out.
+  Serial.println("END Notify Loop");
+  Serial.println();
+
+  // N1ot exaclty sure what this does... Writes the value of tick to virtual pin 2?
+  // But nothing in the app is dealing with that pin, so I am just going to comment that out.
+  // I suppose it would be possible to display how long the door has been open on the LCD.
   //Blynk.virtualWrite(V2, tick);
 }
 
 void uptimeWidget()
 {
-  // writes the elapsed time to Blynk pin V4
-  // / 60000 to convert milliseconds to minutes
-  // / 1000 to convert milliseconds to seconds
+  // Writes the elapsed device uptime to Blynk pin V4
+  // 60000 to convert milliseconds to minutes
+  // 1000 to convert milliseconds to seconds
   Blynk.virtualWrite(V4, millis() / 60000);
 }
 
@@ -106,20 +109,20 @@ void setup(void)
   Serial.println("Serial enabled");
 
   // You can also specify server:
-  // Blynk.begin(auth, ssid, pass, "blynk-cloud.com", 8442);
-  // Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8442);
+  //Blynk.begin(auth, ssid, pass, "blynk-cloud.com", 8442);
+  //Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8442);
   Blynk.begin(auth, ssid, pass);
 
   // Setup physical button pin (active low)
   pinMode(doorPin, INPUT);
   // this timer only allows the function that checks the door state to run every 500 ms by default
   // Experiement with this value and check for power savings
-  timer.setInterval(500, buttonLedWidget);
+  timer.setInterval(2000, buttonLedWidget);
   // timer to send the uptime to pin V4 every 60 seconds
   timer.setInterval(60000, uptimeWidget);
 }
 
-//Main loop to execute all the functions defined above
+// Main loop to execute all the functions defined above
 void loop(void)
 {
   Blynk.run();
