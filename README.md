@@ -14,14 +14,17 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 ### Blynk and WiFi Authentication
-You must recreate the src/sensitiveData.h file with your Blynk authentication token and your WiFi SSID and password.
+You must recreate the sensitiveData.h file in your includes path.
+This should contain your Blynk authentication token and your WiFi SSID and password as follows:
 
 ```
-//your Blynk auth token
+// Your Blynk auth token
 //char auth[] = "";
-//your WiFi SSID
+
+// Your WiFi SSID
 //char ssid[] = "";
-//your WiFi password
+
+// Your WiFi password
 //char pass[] = "";
 ```
 
@@ -31,7 +34,7 @@ Feel free to submit pull requests [here](https://github.com/BlueArcherX/SmartPho
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+This project uses [SemVer](http://semver.org/) for versioning. For the versions available, see the [releases on this repository](https://github.com/BlueArcherX/SmartPhoneGarageDoorOpener/releases). 
 
 ## Authors
 
