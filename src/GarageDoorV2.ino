@@ -25,7 +25,9 @@
 // The physical pin that receives the input from the door switch.
 const int doorPin = 2;
 // The virtual button in the Blynk app to enable or disable the notifications.
-int warnPin;
+// Defaulting it to 1 because the app does not seem to actively write 1 upon startup
+// even though the button state defaults to on.
+int warnPin = 1;
 
 // warnThreshold is the number of ticks that must pass after opening the door before the phone app will notify
 // This is highly dependent on the buttonLedWidget timer value near the bottom of this file
