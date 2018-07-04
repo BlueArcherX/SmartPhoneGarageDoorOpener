@@ -1,6 +1,6 @@
 /.vscode/**
-/.pioenvs
-/.piolibdeps
+/.pioenvs/**
+/.piolibdeps/**
 /.travis.yml
 /platformio.ini
 /lib/readme.txt
