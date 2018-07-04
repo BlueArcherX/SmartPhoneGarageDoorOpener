@@ -20,7 +20,7 @@
 //char pass[] = "";
 
 // Comment this out to disable prints and save space
-#define BLYNK_PRINT Serial
+//#define BLYNK_PRINT Serial
 
 // The physical pin that receives the input from the door switch.
 const int doorPin = 2;
